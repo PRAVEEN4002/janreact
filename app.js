@@ -73,6 +73,10 @@ app.get('/rest',(req,res) => {
     else if(req.query.city){
       condition={city:req.query.city}
     }
+    //getting rest based on name of rest
+    else if(req.query.name){
+      condition={name:req.query.name}
+    }
   db.collection('restaurent').find(condition).toArray((err,result)=>{
     if(err) throw err;
     res.send(result)
