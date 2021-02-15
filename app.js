@@ -53,6 +53,10 @@ app.get('/rest/:id',(req,res) =>{
 //*Rest route and filtering restaurent based on mealtype,cost,city and using both of them as well *//
 app.get('/rest',(req,res) => {
   var condition ={};
+  var sortcondition={cost:1};
+    if(req.query.mealtype&& req.query.sort){
+      sortcondition={cost:Number(req.query.sort)}
+    }
     // getting rest data based on (meal and cost) filter
     if(req.query.mealtype && req.query.lcost && req.query.hcost){
       condition={$and:[{"type.mealtype":req.query.mealtype},{cost:{$lt:Number(req.query.hcost),$gt:Number(req.query.lcost)}}]}
@@ -77,7 +81,7 @@ app.get('/rest',(req,res) => {
     else if(req.query.name){
       condition={name:req.query.name}
     }
-  db.collection('restaurent').find(condition).toArray((err,result)=>{
+  db.collection('restaurent').find(condition).sort(sortcondition).toArray((err,result)=>{
     if(err) throw err;
     res.send(result)
   }) 
